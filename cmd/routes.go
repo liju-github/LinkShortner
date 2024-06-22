@@ -7,23 +7,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var Server *gin.Engine
+
 func ServerStart() {
-	server := gin.Default()
-
-	server.GET("/health", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"status": "ok",
-		})
-	})
-	server.GET("/url/all",service.GetURLs)
-	server.GET("/url/short/:url")
-	server.GET("/:key",service.GetRedirectURL)
-	server.GET("/url/stats/:shorturl")
-	server.GET("/env", service.Env)
-
-	err := server.Run(":8080")
+	Server = gin.Default()
+	Server.LoadHTMLGlob("../template/*.html")
+	Routes()
+	err := Server.Run(":8080")
 	if err != nil {
 		panic(err)
 	}
 
+}
+
+func Routes() {
+	Server.GET("/home",service.LoadHomeHTML)
+	Server.GET("/health", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
+	Server.GET("/url/all", service.GetURLs)
+	Server.GET("/url/short/:url")
+	Server.GET("/:key", service.GetRedirectURL)
+	Server.GET("/url/stats/:shorturl")
+	Server.GET("/env", service.Env)
 }

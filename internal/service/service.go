@@ -42,3 +42,8 @@ func GetRedirectURL(c *gin.Context) {
 	// Now RedirectURL is guaranteed to start with "http://"
 	c.Redirect(http.StatusPermanentRedirect, RedirectURL.String())
 }
+
+
+func LoadHomeHTML(c *gin.Context)  {
+	c.HTML(http.StatusOK,"index.html",nil)
+}
