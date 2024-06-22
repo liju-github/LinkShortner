@@ -28,7 +28,7 @@ func Routes() {
 		})
 	})
 	Server.GET("/url/all", service.GetURLs)
-	Server.GET("/url/short/:url")
+	Server.POST("/url/short/",service.ProcessURL)
 	Server.GET("/:key", service.GetRedirectURL)
 	Server.GET("/url/stats/:shorturl")
 	Server.GET("/env", service.Env)

@@ -11,3 +11,7 @@ type DatabaseCred struct{
    User string
    Password string
 }
+
+type Request struct {
+   Url string `form:"url,required"`
+}

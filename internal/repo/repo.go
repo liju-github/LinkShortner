@@ -16,11 +16,30 @@ func GetURLsDB() ([]models.LinkShortner, error) {
 	return URLs, nil
 }
 
-
-func GetRedirectURL(Key string) (string,error) {
+func GetRedirectURL(Key string) (string, error) {
 	var result models.LinkShortner
-	if err := database.DB.Where("url_key =?", Key).First(&result).Error; err!= nil {
+	if err := database.DB.Where("url_key =?", Key).First(&result).Error; err != nil {
 		return "", errors.New("failed to get redirect url")
 	}
 	return result.OriginalLink, nil
+}
+
+func AddURL(key string, OriginalURL string) error {
+	Add := models.LinkShortner{
+		UrlKey:       key,
+		OriginalLink: OriginalURL,
+	}
+	if err := database.DB.Create(&Add).Error; err != nil {
+		return errors.New("failed to add new url")
+	}
+
+	return nil
+}
+
+func KeyExistence(key string) bool {
+	var URL models.LinkShortner
+	if err := database.DB.First("url_key = ?", key).First(&URL).Error; err != nil {
+		return false
+	}
+	return true
 }
